@@ -2,32 +2,55 @@
 
 <PageTitle>Index</PageTitle>
 
-@page "/conversion"
-
 <h3>Feet to Meters and Meters to Feet Converter</h3>
 
 <div>
-    <label for="feetInput">Enter feet:</label>
-    <input id="feetInput" @bind="feet" />
-    <button @onclick="ConvertFeetToMeters">Convert</button>
+    <div>
+        <label for="feetInput">Enter feet:</label>
+        <input id="feetInput" @bind="feet" />   
+        <button class="btn btn-outline-primary" @onclick="ConvertFeetToMeters">Convert</button>   
+    </div>
 </div>
+
+<br/>
+
+<div>
+    <label for="inchesInput">Enter inches to add:</label>
+    <input id="inchesInput" @bind="inches" />
+    <button class="btn btn-outline-primary" @onclick="ConvertToMeters">Convert</button>
+</div>
+
+<br />
 
 <div>
     <label for="metersInput">Enter meters:</label>
     <input id="metersInput" @bind="meters" />
-    <button @onclick="ConvertMetersToFeet">Convert</button>
+    <button class="btn btn-outline-primary" @onclick="ConvertMetersToFeet">Convert</button>
+</div>
+
+<br />
+
+<div>
+    <p>@feet feet plus @inches inches is equivalent to @meters meters.</p>
+</div>
+
+<br />
+
+<h3>Meters to Feet and Inches Converter</h3>
+
+<div>
+    <label for="metersInput">Enter meters:</label>
+    <input id="metersInput" @bind="meters" />
+    <button class="btn btn-outline-primary" @onclick="ConvertToFeetAndInches">Convert</button>
 </div>
 
 <div>
-    <p>@feet feet is equivalent to @meters meters.</p>
-</div>
-
-<div>
-    <p>@meters meters is equivalent to @feet feet.</p>
+    <p>@meters meters is equivalent to @feet feet and @inches inches.</p>
 </div>
 
 @code {
     private double feet;
+    private double inches;
     private double meters;
 
     private void ConvertFeetToMeters()
@@ -38,5 +61,24 @@
     private void ConvertMetersToFeet()
     {
         feet = meters / 0.3048;
+    }
+}
+
+@code {
+
+    private void ConvertToMeters()
+    {
+        double totalInches = (feet * 12) + inches;
+        meters = totalInches * 0.0254;
+    }
+}
+
+@code {
+
+    private void ConvertToFeetAndInches()
+    {
+        double totalInches = meters / 0.0254;
+        feet = (totalInches / 12);
+        inches = totalInches % 12;
     }
 }
