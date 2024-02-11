@@ -5,19 +5,17 @@
 <h3>Feet to Meters and Meters to Feet Converter</h3>
 
 <div>
-    <div>
-        <label for="feetInput">Enter feet:</label>
-        <input id="feetInput" @bind="feet" />   
-        <button class="btn btn-outline-primary" @onclick="ConvertFeetToMeters">Convert</button>   
-    </div>
+    <label for="feetInput">Enter feet:</label>
+    <input id="feetInput" @bind="feet" />
+    <button class="btn btn-outline-primary" @onclick="ConvertFeetToMeters">Convert to Meters</button>
 </div>
 
-<br/>
+<br />
 
 <div>
     <label for="inchesInput">Enter inches to add:</label>
     <input id="inchesInput" @bind="inches" />
-    <button class="btn btn-outline-primary" @onclick="ConvertToMeters">Convert</button>
+    <button class="btn btn-outline-primary" @onclick="AddInchesToFeetAndConvertToMeters">Add to Feet and Convert to Meters</button>
 </div>
 
 <br />
@@ -25,7 +23,7 @@
 <div>
     <label for="metersInput">Enter meters:</label>
     <input id="metersInput" @bind="meters" />
-    <button class="btn btn-outline-primary" @onclick="ConvertMetersToFeet">Convert</button>
+    <button class="btn btn-outline-primary" @onclick="ConvertMetersToFeet">Convert to Feet</button>
 </div>
 
 <br />
@@ -41,44 +39,89 @@
 <div>
     <label for="metersInput">Enter meters:</label>
     <input id="metersInput" @bind="meters" />
-    <button class="btn btn-outline-primary" @onclick="ConvertToFeetAndInches">Convert</button>
+    <button class="btn btn-outline-primary" @onclick="ConvertMetersToFeetAndInches">Convert to Feet and Inches</button>
 </div>
+
+<br />
 
 <div>
     <p>@meters meters is equivalent to @feet feet and @inches inches.</p>
 </div>
 
+<br>
+
+<h3>Temperature Converter</h3>
+
+<div>
+    <label>Fahrenheit:</label>
+    <input type="text" @bind="fahrenheit" />
+    <button class="btn btn-outline-primary" @onclick="ConvertFahrenheitToCelsius">Convert to Celsius</button>
+</div>
+
+<br>
+
+<div>
+    <label>Celsius:</label>
+    <input type="text" @bind="celsius" />
+    <button class="btn btn-outline-primary" @onclick="ConvertCelsiusToFahrenheit">Convert to Fahrenheit</button>
+</div>
+
 @code {
-    private double feet;
-    private double inches;
-    private double meters;
+    private string fahrenheit = string.Empty;
+    private string celsius = string.Empty;
+    private string feet = string.Empty;
+    private string inches = string.Empty;
+    private string meters = string.Empty;
+
+    private void ConvertCelsiusToFahrenheit()
+    {
+        if (double.TryParse(celsius, out var celsiusValue))
+        {
+            // Celsius to Fahrenheit conversion formula: (C * 9/5) + 32
+            fahrenheit = ((celsiusValue * 9 / 5) + 32).ToString();
+        }
+    }
+
+    private void ConvertFahrenheitToCelsius()
+    {
+        if (double.TryParse(fahrenheit, out var fahrenheitValue))
+        {
+            // Fahrenheit to Celsius conversion formula: (F - 32) * 5/9
+            celsius = ((fahrenheitValue - 32) * 5 / 9).ToString();
+        }
+    }
 
     private void ConvertFeetToMeters()
     {
-        meters = feet * 0.3048;
+        if (double.TryParse(feet, out var feetValue))
+        {
+            meters = Math.Round(feetValue * 0.3048, 4).ToString();
+        }
     }
 
     private void ConvertMetersToFeet()
     {
-        feet = meters / 0.3048;
+        if (double.TryParse(meters, out var metersValue))
+        {
+            feet = (Math.Round(metersValue / 0.3048, 4)).ToString();
+        }
     }
-}
-
-@code {
-
-    private void ConvertToMeters()
+    private void AddInchesToFeetAndConvertToMeters()
     {
-        double totalInches = (feet * 12) + inches;
-        meters = totalInches * 0.0254;
+        if ((double.TryParse(inches, out var inchesValue)) && (double.TryParse(feet, out var feetValue)))
+        {
+            double totalInches = (feetValue * 12) + inchesValue;
+            meters = Math.Round(totalInches * 0.0254, 4).ToString();
+        }
     }
-}
-
-@code {
-
-    private void ConvertToFeetAndInches()
+    private void ConvertMetersToFeetAndInches()
     {
-        double totalInches = meters / 0.0254;
-        feet = (totalInches / 12);
-        inches = totalInches % 12;
+        if (double.TryParse(meters, out var metersValue))  
+        {
+            double  feetValue = Math.Round(metersValue / 0.3048);
+            feet = feetValue.ToString();
+            double inchesValue = Math.Round((metersValue - feetValue * 0.3048) / 0.0254, 4);
+            inches = inchesValue.ToString();
+        }
     }
 }
