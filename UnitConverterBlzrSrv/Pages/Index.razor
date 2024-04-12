@@ -1,66 +1,111 @@
 ﻿@page "/"
+@using UnitConverterBlzrSrv.Data
+@inject IDistanceConverter DistanceConverterService
 
-<PageTitle>Index</PageTitle>
+<h3>Distance Converter</h3>
+
+<div class="row">
+    <div class="col">
+        <div class="input-group mb-3">
+            <input class="form-control" @bind="miles" placeholder="Enter miles">
+            <div class="input-group-append">
+                <span class="input-group-text">Miles</span>
+            </div>
+        </div>
+    </div>
+    <div class="col">
+        <div class="input-group mb-3">
+            <input  class="form-control" @bind="kilometers" placeholder="Enter kilometers">
+            <div class="input-group-append">
+                <span class="input-group-text">Kilometers</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mb-3">
+    <div class="col">
+        <button class="btn btn-outline-primary" @onclick="ConvertMilesToKilometers">Convert Miles to Kilometers</button>
+    </div>
+    <div class="col">
+        <button class="btn btn-outline-primary" @onclick="ConvertKilometersToMiles">Convert Kilometers to Miles</button>
+    </div>
+</div>
+
+@if (converted)
+{
+    <div class="alert alert-success mt-3" role="alert">
+        @result
+    </div>
+}
+
+@code {
+    double miles;
+    double kilometers;
+    string? result;
+    bool converted;
+
+    public void ConvertMilesToKilometers()
+    {
+        kilometers = DistanceConverterService.MilesToKilometers(miles); 
+        result = $"{miles} miles is equal to {kilometers} kilometers.";         
+        converted = true;
+    }
+
+    public void ConvertKilometersToMiles()
+    {
+        miles = DistanceConverterService.KilometersToMiles(kilometers);
+        result = $"{kilometers} kilometers is equal to {miles} miles.";               
+        converted = true;
+    }
+}
+
 
 <h3>Feet to Meters and Meters to Feet Converter</h3>
 
-<div>
+<div class="mb-3">
     <label for="feetInput">Enter feet:</label>
     <input id="feetInput" @bind="feet" />
     <button class="btn btn-outline-primary" @onclick="ConvertFeetToMeters">Convert to Meters</button>
 </div>
 
-<br />
-
-<div>
+<div class="mb-3">
     <label for="inchesInput">Enter inches to add:</label>
     <input id="inchesInput" @bind="inches" />
     <button class="btn btn-outline-primary" @onclick="AddInchesToFeetAndConvertToMeters">Add to Feet and Convert to Meters</button>
 </div>
-
-<br />
-
-<div>
+    
+<div class="mb-3">
     <label for="metersInput">Enter meters:</label>
     <input id="metersInput" @bind="meters" />
     <button class="btn btn-outline-primary" @onclick="ConvertMetersToFeet">Convert to Feet</button>
-</div>
+</div> 
 
-<br />
-
-<div>
+<div class="mb-3">
     <p>@feet feet plus @inches inches is equivalent to @meters meters.</p>
 </div>
 
-<br />
-
 <h3>Meters to Feet and Inches Converter</h3>
 
-<div>
+<div class="mb-3">
     <label for="metersInput">Enter meters:</label>
     <input id="metersInput" @bind="meters" />
     <button class="btn btn-outline-primary" @onclick="ConvertMetersToFeetAndInches">Convert to Feet and Inches</button>
 </div>
 
-<br />
-
-<div>
+<div class="mb-3">
     <p>@meters meters is equivalent to @feet feet and @inches inches.</p>
 </div>
-
-<br>
-
+  
 <h3>Temperature Converter</h3>
 
-<div>
+<div class="mb-3">
     <label>Fahrenheit:</label>
     <input type="text" @bind="fahrenheit" />
     <button class="btn btn-outline-primary" @onclick="ConvertFahrenheitToCelsius">Convert to Celsius</button>
 </div>
 
-<br>
-
-<div>
+<div class="mb-3">
     <label>Celsius:</label>
     <input type="text" @bind="celsius" />
     <button class="btn btn-outline-primary" @onclick="ConvertCelsiusToFahrenheit">Convert to Fahrenheit</button>
