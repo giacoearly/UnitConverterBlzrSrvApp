@@ -15,7 +15,7 @@
     </div>
     <div class="col">
         <div class="input-group mb-3">
-            <input  class="form-control" @bind="kilometers" placeholder="Enter kilometers">
+            <input class="form-control" @bind="kilometers" placeholder="Enter kilometers">
             <div class="input-group-append">
                 <span class="input-group-text">Kilometers</span>
             </div>
@@ -40,26 +40,32 @@
 }
 
 @code {
-    double miles;
-    double kilometers;
-    string? result;
-    bool converted;
+    private string? miles = string.Empty;
+    private string? kilometers = string.Empty;
+    private string? result = string.Empty;
+    private bool converted;
 
     public void ConvertMilesToKilometers()
     {
-        kilometers = DistanceConverterService.MilesToKilometers(miles); 
-        result = $"{miles} miles is equal to {kilometers} kilometers.";         
-        converted = true;
+        if (double.TryParse(miles, out var milesValue))
+        {
+            kilometers = DistanceConverterService.MilesToKilometers(milesValue).ToString();
+            result = $"{miles} miles is equal to {kilometers} kilometers.";
+            converted = true;
+        }
     }
 
     public void ConvertKilometersToMiles()
     {
-        miles = DistanceConverterService.KilometersToMiles(kilometers);
-        result = $"{kilometers} kilometers is equal to {miles} miles.";               
-        converted = true;
+        if (double.TryParse(kilometers, out var kilometersValue))
+        {
+            miles = DistanceConverterService.KilometersToMiles(kilometersValue).ToString();
+            result = $"{kilometers} kilometers is equal to {miles} miles.";
+            converted = true;
+        }
     }
-}
 
+}
 
 <h3>Feet to Meters and Meters to Feet Converter</h3>
 
@@ -74,12 +80,12 @@
     <input id="inchesInput" @bind="inches" />
     <button class="btn btn-outline-primary" @onclick="AddInchesToFeetAndConvertToMeters">Add to Feet and Convert to Meters</button>
 </div>
-    
+
 <div class="mb-3">
     <label for="metersInput">Enter meters:</label>
     <input id="metersInput" @bind="meters" />
     <button class="btn btn-outline-primary" @onclick="ConvertMetersToFeet">Convert to Feet</button>
-</div> 
+</div>
 
 <div class="mb-3">
     <p>@feet feet plus @inches inches is equivalent to @meters meters.</p>
@@ -96,7 +102,7 @@
 <div class="mb-3">
     <p>@meters meters is equivalent to @feet feet and @inches inches.</p>
 </div>
-  
+
 <h3>Temperature Converter</h3>
 
 <div class="mb-3">
@@ -161,9 +167,9 @@
     }
     private void ConvertMetersToFeetAndInches()
     {
-        if (double.TryParse(meters, out var metersValue))  
+        if (double.TryParse(meters, out var metersValue))
         {
-            double  feetValue = Math.Round(metersValue / 0.3048);
+            double feetValue = Math.Round(metersValue / 0.3048);
             feet = feetValue.ToString();
             double inchesValue = Math.Round((metersValue - feetValue * 0.3048) / 0.0254, 4);
             inches = inchesValue.ToString();
