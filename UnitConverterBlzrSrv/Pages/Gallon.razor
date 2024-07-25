@@ -1,0 +1,57 @@
+﻿@page "/gallon"
+
+<h3>Gallon to Liter Converter</h3>
+
+<div class="row mb-3">
+    <div class="col">
+        <div class="input-group mb-3">
+            <input type="text" class="form-control" @bind="gallons" placeholder="Enter gallons" />
+            <div class="input-group-append">
+                <span class="input-group-text">Gallons</span>
+            </div>
+        </div>
+        <button class="btn btn-outline-primary mt-2" @onclick="ConvertGallonsToLiters">Convert to Liters</button>
+    </div>
+    <div class="col">
+        <div class="input-group mb-3">
+            <input type="text" class="form-control" @bind="liters" placeholder="Enter liters" />
+            <div class="input-group-append">
+                <span class="input-group-text">Liters</span>
+            </div>
+        </div>
+        <button class="btn btn-outline-primary mt-2" @onclick="ConvertLitersToGallons">Convert to Gallons</button>
+    </div>
+</div>
+
+@if (!string.IsNullOrEmpty(conversionResult))
+{
+    <div class="alert alert-success mt-3" role="alert">
+        @conversionResult
+    </div>
+}
+
+@code {
+    private string gallons = string.Empty;
+    private string liters = string.Empty;
+    private string conversionResult = string.Empty;
+
+    private void ConvertGallonsToLiters()
+    {
+        if (double.TryParse(gallons, out var gallonValue))
+        {
+            var literValue = gallonValue * 4.54609;
+            liters = literValue.ToString("F4");
+            conversionResult = $"{gallons} imperial gallons is equal to {liters} liters.";
+        }
+    }
+
+    private void ConvertLitersToGallons()
+    {
+        if (double.TryParse(liters, out var literValue))
+        {
+            var gallonValue = literValue / 4.54609;
+            gallons = gallonValue.ToString("F4");
+            conversionResult = $"{liters} liters is equal to {gallons} imperial gallons.";
+        }
+    }
+}

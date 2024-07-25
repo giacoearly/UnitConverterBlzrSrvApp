@@ -1,5 +1,6 @@
 ﻿@page "/"
 @using UnitConverterBlzrSrv.Data
+@using UnitConverterBlzrSrv.Pages
 @inject IDistanceConverter DistanceConverterService
 
 <h3>Distance Converter</h3>
@@ -39,11 +40,69 @@
     </div>
 }
 
+<h3>Feet to Meters and Meters to Feet Converter</h3>
+
+<div class="row mb-3">
+    <div class="col">
+        <div class="input-group mb-3">
+            <input id="feetInput" class="form-control" @bind="feet" placeholder="Enter feet" />
+            <div class="input-group-append">
+                <span class="input-group-text">Feet</span>
+            </div>
+        </div>
+        <button class="btn btn-outline-primary mt-2" @onclick="ConvertFeetToMeters">Convert to Meters</button>
+    </div>
+    <div class="col">
+        <div class="input-group mb-3">
+            <input id="inchesInput" class="form-control" @bind="inches" placeholder="Enter inches" />
+            <div class="input-group-append">
+                <span class="input-group-text">Inches</span>
+            </div>
+        </div>
+        <button class="btn btn-outline-primary mt-2" @onclick="AddInchesToFeetAndConvertToMeters">Add to Feet and Convert to Meters</button>
+    </div>
+    <div class="col">
+        <div class="input-group mb-3">
+            <input id="metersInput" class="form-control" @bind="meters" placeholder="Enter meters" />
+            <div class="input-group-append">
+                <span class="input-group-text">Meters</span>
+            </div>
+        </div>
+        <button class="btn btn-outline-primary mt-2" @onclick="ConvertMetersToFeet">Convert to Feet</button>
+    </div>
+</div>
+
+<div class="mb-3">
+    <p>@feet feet plus @inches inches is equivalent to @meters meters.</p>
+</div>
+
+<h3>Meters to Feet and Inches Converter</h3>
+
+<div class="row mb-3">
+    <div class="col">
+        <div class="input-group mb-3">
+            <input id="metersInput" class="form-control" @bind="meters" placeholder="Enter meters" />
+            <div class="input-group-append">
+                <span class="input-group-text">Meters</span>
+            </div>
+        </div>
+        <button class="btn btn-outline-primary mt-2" @onclick="ConvertMetersToFeetAndInches">Convert to Feet and Inches</button>
+    </div>
+</div>
+
+<div class="mb-3">
+    <p>@meters meters is equivalent to @feet feet and @inches inches.</p>
+</div>
+
 @code {
     private string? miles = string.Empty;
     private string? kilometers = string.Empty;
     private string? result = string.Empty;
     private bool converted;
+
+    private string feet = string.Empty;
+    private string inches = string.Empty;
+    private string meters = string.Empty;
 
     public void ConvertMilesToKilometers()
     {
@@ -65,83 +124,6 @@
         }
     }
 
-}
-
-<h3>Feet to Meters and Meters to Feet Converter</h3>
-
-<div class="mb-3">
-    <label for="feetInput">Enter feet:</label>
-    <input id="feetInput" @bind="feet" />
-    <button class="btn btn-outline-primary" @onclick="ConvertFeetToMeters">Convert to Meters</button>
-</div>
-
-<div class="mb-3">
-    <label for="inchesInput">Enter inches to add:</label>
-    <input id="inchesInput" @bind="inches" />
-    <button class="btn btn-outline-primary" @onclick="AddInchesToFeetAndConvertToMeters">Add to Feet and Convert to Meters</button>
-</div>
-
-<div class="mb-3">
-    <label for="metersInput">Enter meters:</label>
-    <input id="metersInput" @bind="meters" />
-    <button class="btn btn-outline-primary" @onclick="ConvertMetersToFeet">Convert to Feet</button>
-</div>
-
-<div class="mb-3">
-    <p>@feet feet plus @inches inches is equivalent to @meters meters.</p>
-</div>
-
-<h3>Meters to Feet and Inches Converter</h3>
-
-<div class="mb-3">
-    <label for="metersInput">Enter meters:</label>
-    <input id="metersInput" @bind="meters" />
-    <button class="btn btn-outline-primary" @onclick="ConvertMetersToFeetAndInches">Convert to Feet and Inches</button>
-</div>
-
-<div class="mb-3">
-    <p>@meters meters is equivalent to @feet feet and @inches inches.</p>
-</div>
-
-<h3>Temperature Converter</h3>
-
-<div class="mb-3">
-    <label>Fahrenheit:</label>
-    <input type="text" @bind="fahrenheit" />
-    <button class="btn btn-outline-primary" @onclick="ConvertFahrenheitToCelsius">Convert to Celsius</button>
-</div>
-
-<div class="mb-3">
-    <label>Celsius:</label>
-    <input type="text" @bind="celsius" />
-    <button class="btn btn-outline-primary" @onclick="ConvertCelsiusToFahrenheit">Convert to Fahrenheit</button>
-</div>
-
-@code {
-    private string fahrenheit = string.Empty;
-    private string celsius = string.Empty;
-    private string feet = string.Empty;
-    private string inches = string.Empty;
-    private string meters = string.Empty;
-
-    private void ConvertCelsiusToFahrenheit()
-    {
-        if (double.TryParse(celsius, out var celsiusValue))
-        {
-            // Celsius to Fahrenheit conversion formula: (C * 9/5) + 32
-            fahrenheit = ((celsiusValue * 9 / 5) + 32).ToString();
-        }
-    }
-
-    private void ConvertFahrenheitToCelsius()
-    {
-        if (double.TryParse(fahrenheit, out var fahrenheitValue))
-        {
-            // Fahrenheit to Celsius conversion formula: (F - 32) * 5/9
-            celsius = ((fahrenheitValue - 32) * 5 / 9).ToString();
-        }
-    }
-
     private void ConvertFeetToMeters()
     {
         if (double.TryParse(feet, out var feetValue))
@@ -154,25 +136,84 @@
     {
         if (double.TryParse(meters, out var metersValue))
         {
-            feet = (Math.Round(metersValue / 0.3048, 4)).ToString();
+            feet = Math.Round(metersValue / 0.3048, 4).ToString();
         }
     }
+
     private void AddInchesToFeetAndConvertToMeters()
     {
-        if ((double.TryParse(inches, out var inchesValue)) && (double.TryParse(feet, out var feetValue)))
+        if (double.TryParse(inches, out var inchesValue) && double.TryParse(feet, out var feetValue))
         {
             double totalInches = (feetValue * 12) + inchesValue;
             meters = Math.Round(totalInches * 0.0254, 4).ToString();
         }
     }
+
     private void ConvertMetersToFeetAndInches()
     {
         if (double.TryParse(meters, out var metersValue))
         {
-            double feetValue = Math.Round(metersValue / 0.3048);
+            double feetValue = Math.Floor(metersValue / 0.3048);
             feet = feetValue.ToString();
-            double inchesValue = Math.Round((metersValue - feetValue * 0.3048) / 0.0254, 4);
+            double remainingMeters = metersValue - (feetValue * 0.3048);
+            double inchesValue = Math.Round(remainingMeters / 0.0254, 4);
             inches = inchesValue.ToString();
+        }
+    }
+}
+
+<h3>Yard to Meter Converter</h3>
+
+<div class="row mb-3">
+    <div class="col">
+        <div class="input-group mb-3">
+            <input type="text" class="form-control" @bind="yards" placeholder="Enter yards" />
+            <div class="input-group-append">
+                <span class="input-group-text">Yards</span>
+            </div>
+        </div>
+        <button class="btn btn-outline-primary mt-2" @onclick="ConvertYardsToMeters">Convert to Meters</button>
+    </div>
+    <div class="col">
+        <div class="input-group mb-3">
+            <input type="text" class="form-control" @bind="meters_y" placeholder="Enter meters" />
+            <div class="input-group-append">
+                <span class="input-group-text">Meters</span>
+            </div>
+        </div>
+        <button class="btn btn-outline-primary mt-2" @onclick="ConvertMetersToYards">Convert to Yards</button>
+    </div>
+</div>
+
+@if (!string.IsNullOrEmpty(conversionResult))
+{
+    <div class="alert alert-success mt-3" role="alert">
+        @conversionResult
+    </div>
+}
+
+@code {
+    private string yards = string.Empty;
+    private string meters_y = string.Empty;
+    private string conversionResult = string.Empty;
+
+    private void ConvertYardsToMeters()
+    {
+        if (double.TryParse(yards, out var yardValue))
+        {
+            var meterValue = yardValue * 0.9144;
+            meters_y = meterValue.ToString("F4");
+            conversionResult = $"{yards} yards is equal to {meters} meters.";
+        }
+    }
+
+    private void ConvertMetersToYards()
+    {
+        if (double.TryParse(meters_y, out var meterValue))
+        {
+            var yardValue = meterValue / 0.9144;
+            yards = yardValue.ToString("F4");
+            conversionResult = $"{meters} meters is equal to {yards} yards.";
         }
     }
 }

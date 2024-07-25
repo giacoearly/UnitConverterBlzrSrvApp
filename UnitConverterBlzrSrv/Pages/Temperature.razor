@@ -1,0 +1,46 @@
+﻿@namespace UnitConverterBlzrSrv.Pages
+@page "/temperature"
+
+<h3>Temperature Converter</h3>
+
+<div class="row mb-3">
+    <div class="col">
+        <div class="input-group mb-3">
+            <input type="text" class="form-control" @bind="fahrenheit" placeholder="Enter Fahrenheit" />
+            <div class="input-group-append">
+                <span class="input-group-text">°F</span>
+            </div>
+        </div>
+        <button class="btn btn-outline-primary mt-2" @onclick="ConvertFahrenheitToCelsius">Convert to Celsius</button>
+    </div>
+    <div class="col">
+        <div class="input-group mb-3">
+            <input type="text" class="form-control" @bind="celsius" placeholder="Enter Celsius" />
+            <div class="input-group-append">
+                <span class="input-group-text">°C</span>
+            </div>
+        </div>
+        <button class="btn btn-outline-primary mt-2" @onclick="ConvertCelsiusToFahrenheit">Convert to Fahrenheit</button>
+    </div>
+</div>
+
+@code {
+    private string fahrenheit = string.Empty;
+    private string celsius = string.Empty;
+
+    private void ConvertCelsiusToFahrenheit()
+    {
+        if (double.TryParse(celsius, out var celsiusValue))
+        {
+            fahrenheit = ((celsiusValue * 9 / 5) + 32).ToString();
+        }
+    }
+
+    private void ConvertFahrenheitToCelsius()
+    {
+        if (double.TryParse(fahrenheit, out var fahrenheitValue))
+        {
+            celsius = ((fahrenheitValue - 32) * 5 / 9).ToString();
+        }
+    }
+}

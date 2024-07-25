@@ -1,0 +1,57 @@
+﻿@page "/weight"
+
+<h3>Pound to Kilogram Converter</h3>
+
+<div class="row mb-3">
+    <div class="col">
+        <div class="input-group mb-3">
+            <input type="text" class="form-control" @bind="pounds" placeholder="Enter pounds" />
+            <div class="input-group-append">
+                <span class="input-group-text">Pounds</span>
+            </div>
+        </div>
+        <button class="btn btn-outline-primary mt-2" @onclick="ConvertPoundsToKilograms">Convert to Kilograms</button>
+    </div>
+    <div class="col">
+        <div class="input-group mb-3">
+            <input type="text" class="form-control" @bind="kilograms" placeholder="Enter kilograms" />
+            <div class="input-group-append">
+                <span class="input-group-text">Kilograms</span>
+            </div>
+        </div>
+        <button class="btn btn-outline-primary mt-2" @onclick="ConvertKilogramsToPounds">Convert to Pounds</button>
+    </div>
+</div>
+
+@if (!string.IsNullOrEmpty(conversionResult))
+{
+    <div class="alert alert-success mt-3" role="alert">
+        @conversionResult
+    </div>
+}
+
+@code {
+    private string pounds = string.Empty;
+    private string kilograms = string.Empty;
+    private string conversionResult = string.Empty;
+
+    private void ConvertPoundsToKilograms()
+    {
+        if (double.TryParse(pounds, out var poundValue))
+        {
+            var kilogramValue = poundValue * 0.45359237;
+            kilograms = kilogramValue.ToString("F4");
+            conversionResult = $"{pounds} pounds is equal to {kilograms} kilograms.";
+        }
+    }
+
+    private void ConvertKilogramsToPounds()
+    {
+        if (double.TryParse(kilograms, out var kilogramValue))
+        {
+            var poundValue = kilogramValue / 0.45359237;
+            pounds = poundValue.ToString("F4");
+            conversionResult = $"{kilograms} kilograms is equal to {pounds} pounds.";
+        }
+    }
+}
